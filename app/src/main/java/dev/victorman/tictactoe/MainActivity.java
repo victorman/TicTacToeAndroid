@@ -2,14 +2,9 @@ package dev.victorman.tictactoe;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.view.MotionEventCompat;
 
 import android.content.Context;
-import android.graphics.Point;
-import android.graphics.Rect;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +14,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String DEBUG_TAG = MainActivity.class.getCanonicalName();
     private Context context;
     private ConstraintLayout constraintLayout;
-    private boolean win = false;
+    private boolean end = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,13 +40,13 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case MotionEvent.ACTION_UP:
 
-                        if (win) {
+                        if (end) {
                             view.resetBoard();
                             view.invalidate();
-                            win = false;
+                            end = false;
                         } else {
                             view.enterPlayerMove(x,y);
-                            win = view.checkWin();
+                            end = view.checkEnd();
                         }
                         break;
 

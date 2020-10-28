@@ -121,10 +121,14 @@ public class GameBoardView extends View {
     }
 
     private boolean checkD() {
-        if ((gameBoard[0][0] == gameBoard[1][1]) && (gameBoard[1][1] == gameBoard[2][2]) && (gameBoard[0][0] == 0 || gameBoard[0][0] == 1)) {
+        if ((gameBoard[0][0] == gameBoard[1][1]) &&
+                (gameBoard[1][1] == gameBoard[2][2]) &&
+                (gameBoard[0][0] == 0 || gameBoard[0][0] == 1)) {
             return true;
         }
-        if ((gameBoard[0][2] == gameBoard[1][1]) && (gameBoard[1][1] == gameBoard[2][0]) && (gameBoard[0][2] == 0 || gameBoard[0][2] == 1)) {
+        if ((gameBoard[0][2] == gameBoard[1][1]) &&
+                (gameBoard[1][1] == gameBoard[2][0]) &&
+                (gameBoard[0][2] == 0 || gameBoard[0][2] == 1)) {
             return true;
         }
         return false;
@@ -132,7 +136,9 @@ public class GameBoardView extends View {
 
     private boolean checkV() {
         for(int i=0;i<3;i++) {
-            if ((gameBoard[0][i] == gameBoard[1][i]) && (gameBoard[1][i] == gameBoard[2][i]) && (gameBoard[0][i] == 0 || gameBoard[0][i] == 1)) {
+            if ((gameBoard[0][i] == gameBoard[1][i]) &&
+                    (gameBoard[1][i] == gameBoard[2][i]) &&
+                    (gameBoard[0][i] == 0 || gameBoard[0][i] == 1)) {
                 return true;
             }
         }
@@ -151,5 +157,24 @@ public class GameBoardView extends View {
     public void resetBoard() {
         currentPlayer = 0;
         rects = null;
+    }
+
+    public boolean checkEnd() {
+        if (checkWin())
+            return true;
+        if (checkCat())
+            return true;
+        return false;
+    }
+
+    private boolean checkCat() {
+
+        for (int i=0;i<3;i++) {
+            for (int j = 0; j < 3; j++) {
+                if (gameBoard[i][j] == -1)
+                    return false;
+            }
+        }
+        return true;
     }
 }
