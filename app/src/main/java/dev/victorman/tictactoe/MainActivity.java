@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.Context;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
@@ -22,7 +23,10 @@ public class MainActivity extends AppCompatActivity {
         context = getApplicationContext();
         constraintLayout = new ConstraintLayout(context);
 
-        final GameBoardView view = new GameBoardView(context);
+        final GameModel gameModel = new GameModel();
+        final GameBoardView view = new GameBoardView(context, gameModel);
+        gameModel.addObserver(view);
+
         view.setLayoutParams(new ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT));
@@ -41,12 +45,14 @@ public class MainActivity extends AppCompatActivity {
                     case MotionEvent.ACTION_UP:
 
                         if (end) {
-                            view.resetBoard();
-                            view.invalidate();
+                            gameModel.resetBoard();
                             end = false;
                         } else {
-                            view.enterPlayerMove(x,y);
-                            end = view.checkEnd();
+                            Point p =  view.enterPlayerMove(x,y);
+                            if(p != null) {
+                                gameModel.enterPlayerMove(p.x, p.y);
+                                end = gameModel.checkEnd();
+                            }
                         }
                         break;
 
