@@ -12,15 +12,16 @@ import android.graphics.Rect;
 import android.util.Log;
 import android.view.View;
 
+import java.util.Arrays;
 import java.util.Observable;
 import java.util.Observer;
 
 public class GameBoardView extends View implements Observer {
 
     private final String TAG = GameBoardView.class.getCanonicalName();
-    private final GameModel gameModel;
     private Paint paint;
     private Rect[][] rects;
+    private int[][] gameBoard;
     private float cellWidth;
     private float cellHeight;
     private Rect vbar1;
@@ -28,10 +29,9 @@ public class GameBoardView extends View implements Observer {
     private Rect hbar1;
     private Rect hbar2;
 
-    public GameBoardView(Context context, GameModel gameModel) {
+    public GameBoardView(Context context) {
         super(context);
-
-        this.gameModel = gameModel;
+        gameBoard = new int[3][3];
         //
         paint = new Paint();
         paint.setStrokeWidth(2.0f);
@@ -72,22 +72,25 @@ public class GameBoardView extends View implements Observer {
 
         for (int i=0;i<3;i++) {
             for (int j=0;j<3;j++) {
-                if (gameModel.gameBoard[i][j] == 0) {
+                if (gameBoard[i][j] == 0) {
                             canvas.drawText("X",((i * 4 + 2) * cellWidth), ((j * 4 + 2) * cellHeight), paint);
                 }
-                if (gameModel.gameBoard[i][j] == 1) {
+                if (gameBoard[i][j] == 1) {
                     canvas.drawText("O",((i * 4 + 2) * cellWidth), ((j * 4 + 2) * cellHeight), paint);
                 }
             }
         }
+
     }
 
     public Point enterPlayerMove(int x, int y) {
-//        Log.i(TAG, "move: " + x + " " + y + " player " + currentPlayer);
+        Log.i(TAG, "move: " + x + " " + y);
         for (int i=0;i<3;i++) {
             for (int j=0;j<3;j++) {
                 if (rects[i][j].contains(x,y)) {
-                   return new Point(i,j);
+                    Point p = new Point(i,j);
+                    Log.i(TAG, p.toString());
+                    return p;
                 }
             }
         }
@@ -97,6 +100,7 @@ public class GameBoardView extends View implements Observer {
     public void initBoard(float width, float height) {
         for (int i=0;i<3;i++) {
             for (int j=0;j<3;j++) {
+                gameBoard[i][j] = -1;
                 rects[i][j] = new Rect((int)((i * 4 + 1) * width),
                                         (int)((j * 4 + 1) * height),
                                         (int)((i * 4 + 4) * width),
@@ -108,6 +112,8 @@ public class GameBoardView extends View implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
+
+        gameBoard = ((GameModel) o).getGameBoard();
 
         invalidate();
     }

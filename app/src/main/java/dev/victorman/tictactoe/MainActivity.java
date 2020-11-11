@@ -6,6 +6,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import android.content.Context;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import android.view.ViewGroup;
 public class MainActivity extends AppCompatActivity {
 
     private static final String DEBUG_TAG = MainActivity.class.getCanonicalName();
+    private static final String TAG = MainActivity.class.getCanonicalName();
     private Context context;
     private ConstraintLayout constraintLayout;
     private boolean end = false;
@@ -24,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
         constraintLayout = new ConstraintLayout(context);
 
         final GameModel gameModel = new GameModel();
-        final GameBoardView view = new GameBoardView(context, gameModel);
+        final GameBoardView view = new GameBoardView(context);
         gameModel.addObserver(view);
 
         view.setLayoutParams(new ViewGroup.LayoutParams(
@@ -57,7 +59,6 @@ public class MainActivity extends AppCompatActivity {
                         break;
 
                 }
-                view.invalidate();
 
                 return true;
             }

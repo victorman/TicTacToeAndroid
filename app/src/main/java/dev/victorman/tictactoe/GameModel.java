@@ -5,14 +5,14 @@ import android.util.Log;
 import java.util.Observable;
 
 public class GameModel extends Observable {
-    public int[][] gameBoard;
+    private int[][] gameBoard;
     private int currentPlayer;
+    private final String TAG = GameModel.class.getCanonicalName();
 
     public GameModel() {
 
         gameBoard = new int[3][3];
 
-        currentPlayer = 0;
         initBoard();
     }
 
@@ -66,17 +66,17 @@ public class GameModel extends Observable {
     }
 
     public void resetBoard() {
-        currentPlayer = 0;
         initBoard();
-        notifyObservers();
     }
 
     public boolean checkEnd() {
         if (checkWin()){
+            setChanged();
             notifyObservers();
             return true;
         }
         if (checkCat()){
+            setChanged();
             notifyObservers();
             return true;
         }
@@ -95,11 +95,13 @@ public class GameModel extends Observable {
     }
 
     public void initBoard() {
+        currentPlayer = 0;
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 gameBoard[i][j] = -1;
             }
         }
+        setChanged();
         notifyObservers();
     }
 
@@ -107,8 +109,22 @@ public class GameModel extends Observable {
         if(x > 3 || x < 0 || y > 3 || y < 0)
             return;
 
+        if(gameBoard[x][y] != -1)
+            return;
+
+//        Log.i(TAG, x + " " + y);
         gameBoard[x][y] = currentPlayer;
         currentPlayer = (currentPlayer+1) % 2;
+        setChanged();
         notifyObservers();
+    }
+
+    public int[][] getGameBoard() {
+        return gameBoard;
+    }
+
+    @Override
+    public void notifyObservers() {
+        super.notifyObservers();
     }
 }
